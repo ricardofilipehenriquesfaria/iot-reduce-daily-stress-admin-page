@@ -75,20 +75,21 @@
             $sql = "INSERT INTO civil_protection (name,localizacao, estado, justificacao, responsabilidade, edital_documento, coordenadas, data_encerramento, data_reabertura, hora_encerramento, hora_reabertura, tipo_encerramento) VALUES ('".$name."','".$localizacao."','".$estado."','".$justificacao."','".$responsabilidade."','".$edital_documento."','".$coordenadas."','".$data_encerramento."','".$data_reabertura."','".$hora_encerramento."','".$hora_reabertura."','".$tipo_encerramento."')";
 
             global $mysqli_closed_roads;
+            mysqli_set_charset($mysqli_closed_roads,"utf8");
 
             if (!mysqli_query($mysqli_closed_roads, $sql)) {
-                printf("Error: " . $sql . "<br>" . mysqli_error($mysqli_closed_roads));
+                printf("Error inserting record: " . mysqli_error($mysqli_closed_roads));
             }
 
             updateCivilProtectionTable($id);
         }
-
     }
 
     function updateCivilProtectionTable($id) {
         $sql = "UPDATE temp_civil_protection SET editado=true WHERE id ='".$id."'";
 
         global $mysqli_closed_roads;
+        mysqli_set_charset($mysqli_closed_roads,"utf8");
 
         if (!mysqli_query($mysqli_closed_roads, $sql)) {
             printf("Error updating record: " . mysqli_error($mysqli_closed_roads));

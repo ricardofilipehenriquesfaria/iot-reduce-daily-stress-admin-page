@@ -1,52 +1,42 @@
 <?php
-include("config.php");
-session_start();
+    include("config.php");
+    session_start();
 
-if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit;
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    if (isset($_POST['Editar'])) {
-
-        /*echo "<script>console.log( 'Button: " .$_POST['Editar']. "' );</script>";
-        echo "<script>console.log( 'id: " .$_POST['id']. "' );</script>";
-        echo "<script>console.log( 'name: " .$_POST['name']. "' );</script>";
-        echo "<script>console.log( 'localizacao: " .$_POST['localizacao']. "' );</script>";
-        echo "<script>console.log( 'estado: " .$_POST['estado']. "' );</script>";
-        echo "<script>console.log( 'justificacao: " .$_POST['justificacao']. "' );</script>";
-        echo "<script>console.log( 'responsabilidade: " .$_POST['responsabilidade']. "' );</script>";
-        echo "<script>console.log( 'edital_documento: " .$_POST['edital_documento']. "' );</script>";
-        echo "<script>console.log( 'coordenadas: " .$_POST['coordenadas']. "' );</script>";
-        echo "<script>console.log( 'tipo_encerramento: " .$_POST['tipo_encerramento']. "' );</script>";
-        echo "<script>console.log( 'data_encerramento: " .$_POST['data_encerramento']. "' );</script>";
-        echo "<script>console.log( 'hora_encerramento: " .$_POST['hora_encerramento']. "' );</script>";
-        echo "<script>console.log( 'data_reabertura: " .$_POST['data_reabertura']. "' );</script>";
-        echo "<script>console.log( 'hora_reabertura: " .$_POST['hora_reabertura']. "' );</script>";*/
-        insertCivilProtectionTable(
-                $_POST['id'],
-                $_POST['name'],
-                $_POST['localizacao'],
-                $_POST['estado'],
-                $_POST['justificacao'],
-                $_POST['responsabilidade'],
-                $_POST['edital_documento'],
-                $_POST['coordenadas'],
-                $_POST['data_encerramento'],
-                $_POST['data_reabertura'],
-                $_POST['hora_encerramento'],
-                $_POST['hora_reabertura'],
-                $_POST['tipo_encerramento']);
-    } else if (isset($_POST['Eliminar'])) {
-        echo "<script>console.log( 'Debug Objects: " .$_POST['Eliminar']. "' );</script>";
+    if (!isset($_SESSION['username'])) {
+        header("Location: index.php");
+        exit;
     }
-}
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        if (isset($_POST['Editar'])) {
+
+            insertCivilProtectionTable(
+                    $_POST['id'],
+                    $_POST['name'],
+                    $_POST['localizacao'],
+                    $_POST['estado'],
+                    $_POST['justificacao'],
+                    $_POST['responsabilidade'],
+                    $_POST['edital_documento'],
+                    $_POST['coordenadas'],
+                    $_POST['data_encerramento'],
+                    $_POST['data_reabertura'],
+                    $_POST['hora_encerramento'],
+                    $_POST['hora_reabertura'],
+                    $_POST['tipo_encerramento']);
+
+            header("Location: tables.php");
+        } else if (isset($_POST['Eliminar'])) {
+
+            updateCivilProtectionTable($_POST['id_delete']);
+            header("Location: tables.php");
+        }
+    }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 
 <head>
 
@@ -206,11 +196,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </tfoot>
                             <tbody>
 <?php
-    $query = ("SELECT * FROM temp_civil_protection WHERE editado=0");
+    $sql = "SELECT * FROM temp_civil_protection WHERE editado=0";
+    $result = mysqli_query($mysqli_closed_roads, $sql);
 
-    $result = mysqli_query($mysqli_closed_roads, $query);
     if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
 
             echo "<form id=\"submit-form\" name=\"form\" method=\"post\" target=\"votar\">
                     <tr>
@@ -235,7 +225,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     "')\">
                                     Editar
                                 </button>
-                                <button type=\"submit\" class=\"btn btn-block btn-danger\" data-toggle=\"modal\" data-target='#deleteModal' id=\"".utf8_encode($row['id'])."\">Eliminar</button>
+                                <button type=\"submit\" class=\"btn btn-block btn-danger\" data-toggle=\"modal\" data-target='#deleteModal' onClick=\"tables.setDeleteRow('".utf8_encode($row['id'])."')\">Eliminar</button>
                             </div>
                         </td>
                         <td id=\"id".utf8_encode($row['id'])."\" style=\"display:none;\">".utf8_encode($row['id'])."</td>
@@ -253,13 +243,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 ?>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
 
     </div>
     <!-- End of Main Content -->
@@ -277,169 +267,174 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </div>
     <!-- End of Content Wrapper -->
 
-  </div>
-  <!-- End of Page Wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">De certeza que quer fazer Logout?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Selecione "Logout" se estiver pronto para terminar a sessão atual.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-          <a class="btn btn-primary" href="logout.php">Logout</a>
-        </div>
-      </div>
     </div>
-  </div>
+    <!-- End of Page Wrapper -->
 
-  <!-- Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Editar Dados</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <form class="needs-validation was-validated" method="post">
-                  <div class="modal-body">
-                      <div class="form-group" style="display:none;">
-                          <label>ID</label>
-                          <input type="input" class="form-control" id="id" name="id"/>
-                      </div>
-                      <div class="form-group">
-                          <label>Nome da Via</label>
-                          <input type="text" class="form-control" id="name" name="name" placeholder="Insira o nome da via" required>
-                          <div class="invalid-feedback">Por favor insira o nome da via.</div>
-                      </div>
-                      <div class="form-group">
-                          <label>Localização</label>
-                          <input type="text" class="form-control" id="localizacao" name="localizacao" placeholder="Insira a localização da estrada" required>
-                          <div class="invalid-feedback">Por favor insira a localização da estrada.</div>
-                      </div>
-                      <div class="form-group">
-                          <label>Estado</label>
-                          <input type="text" class="form-control" id="estado" name="estado" placeholder="Insira o estado da estrada" required>
-                          <div class="invalid-feedback">Por favor insira o estado da estrada.</div>
-                      </div>
-                      <div class="form-group">
-                          <label>Justificação</label>
-                          <input type="text" class="form-control" id="justificacao" name="justificacao" placeholder="Insira a justificação para o encerramento da estrada" required>
-                          <div class="invalid-feedback">Por favor insira a justificação para o encerramento da estrada.</div>
-                      </div>
-                      <div class="form-group">
-                          <label>Responsabilidade</label>
-                          <input type="text" class="form-control" id="responsabilidade" name="responsabilidade" placeholder="Insira a quem se deve a responsabilidade do encerramento da estrada" required>
-                          <div class="invalid-feedback">Por favor insira a quem se deve o encerramento da estrada.</div>
-                      </div>
-                      <div class="form-group">
-                          <label>Edital/Documento</label>
-                          <input type="text" class="form-control" id="edital_documento" name="edital_documento" placeholder="Insira o url para o Edital/Documento">
-                      </div>
-                      <div class="form-group" style="display:none;">
-                          <label>Coordenadas</label>
-                          <input type="input" class="form-control" id="coordenadas" name="coordenadas"/>
-                      </div>
-                      <div class="form-group">
-                          <label>Tipo de Encerramento</label>
-                          <div class="radio">
-                              <input type="radio" name="tipo_encerramento" id="temporario" value="temporario" checked>
-                              <label class="form-check-label">
-                                  Temporário (em determinadas horas do dia)
-                              </label>
-                          </div>
-                          <div class="radio">
-                              <input type="radio" name="tipo_encerramento" id="permanente" value="permanente">
-                              <label class="form-check-label">
-                                  Permanente
-                              </label>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label>Data de Encerramento</label>
-                          <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" required/>
-                          <div class="invalid-feedback">Por favor insira a data de encerramento da via.</div>
-                          <div class="alert alert-secondary" role="alert" id="data_encerramento">
-                          </div>
-                      </div>
-                      <div class="form-group" id="div-hora-encerramento">
-                          <label>Hora de Encerramento</label>
-                          <input type="time" class="form-control" id="hora_encerramento" name="hora_encerramento" placeholder="Insira as horas de encerramento da via." required>
-                      </div>
-                      <div class="form-group">
-                          <label>Data de Reabertura</label>
-                          <input type="date" class="form-control" id="data_reabertura" name="data_reabertura" required/>
-                          <div class="invalid-feedback">Por favor insira a data de reabertura da via.</div>
-                          <div class="alert alert-secondary" role="alert" id="data_reabertura">
-                          </div>
-                      </div>
-                      <div class="form-group" id="div-hora-reabertura">
-                          <label>Hora de Reabertura</label>
-                          <input type="time" class="form-control" id="hora_reabertura" name="hora_reabertura" placeholder="Insira as horas de reabertura da via." required>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                      <button type="submit" class="btn btn-primary" name="Editar" id="Editar" value="Editar">Guardar Alterações</button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-  <!-- Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body">
-                  Tem a certeza de que quer eliminar este registo?
-              </div>
-              <form class="needs-validation was-validated" method="post">
-                  <div class="modal-footer">
-                      <button type="submit" class="btn btn-danger" name="Eliminar" id="Eliminar" value="Eliminar">Eliminar</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
-  <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">De certeza que quer fazer Logout?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selecione "Logout" se estiver pronto para terminar a sessão atual.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Dados</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="needs-validation was-validated" method="post">
+                    <div class="modal-body">
+                        <div class="form-group" style="display:none;">
+                            <label>ID</label>
+                            <input type="input" class="form-control" id="id" name="id"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome da Via</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Insira o nome da via" required>
+                            <div class="invalid-feedback">Por favor insira o nome da via.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Localização</label>
+                            <input type="text" class="form-control" id="localizacao" name="localizacao" placeholder="Insira a localização da estrada" required>
+                            <div class="invalid-feedback">Por favor insira a localização da estrada.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <input type="text" class="form-control" id="estado" name="estado" placeholder="Insira o estado da estrada" required>
+                            <div class="invalid-feedback">Por favor insira o estado da estrada.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Justificação</label>
+                            <input type="text" class="form-control" id="justificacao" name="justificacao" placeholder="Insira a justificação para o encerramento da estrada" required>
+                            <div class="invalid-feedback">Por favor insira a justificação para o encerramento da estrada.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Responsabilidade</label>
+                            <input type="text" class="form-control" id="responsabilidade" name="responsabilidade" placeholder="Insira a quem se deve a responsabilidade do encerramento da estrada" required>
+                            <div class="invalid-feedback">Por favor insira a quem se deve o encerramento da estrada.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Edital/Documento</label>
+                            <input type="text" class="form-control" id="edital_documento" name="edital_documento" placeholder="Insira o url para o Edital/Documento">
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <label>Coordenadas</label>
+                            <input type="input" class="form-control" id="coordenadas" name="coordenadas"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Encerramento</label>
+                            <div class="radio">
+                                <input type="radio" name="tipo_encerramento" id="temporario" value="temporario" checked>
+                                <label class="form-check-label">
+                                    Temporário (em determinadas horas do dia)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" name="tipo_encerramento" id="permanente" value="permanente">
+                                <label class="form-check-label">
+                                    Permanente
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Encerramento</label>
+                            <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" required/>
+                            <div class="invalid-feedback">Por favor insira a data de encerramento da via.</div>
+                            <div class="alert alert-secondary" role="alert" id="data_encerramento">
+                            </div>
+                        </div>
+                        <div class="form-group" id="div-hora-encerramento">
+                            <label>Hora de Encerramento</label>
+                            <input type="time" class="form-control" id="hora_encerramento" name="hora_encerramento" placeholder="Insira as horas de encerramento da via." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Reabertura</label>
+                            <input type="date" class="form-control" id="data_reabertura" name="data_reabertura" required/>
+                            <div class="invalid-feedback">Por favor insira a data de reabertura da via.</div>
+                            <div class="alert alert-secondary" role="alert" id="data_reabertura">
+                            </div>
+                        </div>
+                        <div class="form-group" id="div-hora-reabertura">
+                            <label>Hora de Reabertura</label>
+                            <input type="time" class="form-control" id="hora_reabertura" name="hora_reabertura" placeholder="Insira as horas de reabertura da via." required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary" name="Editar" id="Editar" value="Editar">Guardar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tem a certeza de que quer eliminar este registo?
+                </div>
+                <form class="needs-validation was-validated" method="post">
+                    <div class="modal-footer">
+                        <div class="form-group" style="display:none;">
+                            <label>ID</label>
+                            <input type="input" class="form-control" id="id_delete" name="id_delete"/>
+                        </div>
+                        <button type="submit" class="btn btn-danger" name="Eliminar" id="Eliminar" value="Eliminar">Eliminar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-  <!-- Page level plugins -->
-  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="js/demo/datatables-demo.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <script src="js/functions.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
+
+    <script src="js/functions.js"></script>
 
 </body>
 

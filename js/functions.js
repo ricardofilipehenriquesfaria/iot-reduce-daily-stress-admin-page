@@ -24,6 +24,10 @@ tables.setRow = function (
     $("div[id='data_reabertura']").text("Valor anterior: " + data_reabertura);
 };
 
+tables.setDeleteRow = function (id) {
+    $("input[id='id_delete']").val(id);
+}
+
 tables.setRequired = function() {
     $('#permanente').change(function() {
         tables.isChecked();
