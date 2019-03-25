@@ -12,22 +12,20 @@
         } else if (empty($_POST["password"])) {
             $error = "Por favor introduza a sua Password!";
         } else {
-            $myusername = mysqli_real_escape_string($mysqli, $_POST['email']);
-            $mypassword = mysqli_real_escape_string($mysqli, $_POST['password']);
+            $email = mysqli_real_escape_string($mysqli, $_POST['email']);
+            $password = mysqli_real_escape_string($mysqli, $_POST['password']);
 
             $options = [
                 'cost' => 10,
             ];
 
-            $sql = "SELECT id, password FROM user_login WHERE email = '".$myusername."'";
+            $sql = "SELECT id, password FROM user_login WHERE email = '".$email."'";
             $result = mysqli_query($mysqli, $sql);
             $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
-            $count = mysqli_num_rows($result);
-
-            // Se o valor retornado pela base de dados coincidir com $myusername e $mypassword, o número de linhas será 1.
-            if ($count === 1 && password_verify($mypassword, $row['password'])) {
-                $_SESSION['username'] = $myusername;
+            // Se o valor retornado pela base de dados coincidir com $username e $password, o número de linhas será 1.
+            if (mysqli_num_rows($result) === 1 && password_verify($password, $row['password'])) {
+                $_SESSION['username'] = $email;
                 header("Location: tables.php");
             } else {
                 $error = "O Email ou a Password estão incorretos!";
