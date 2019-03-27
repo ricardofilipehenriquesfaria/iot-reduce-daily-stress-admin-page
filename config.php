@@ -79,6 +79,19 @@
 
             if (!mysqli_query($mysqli_closed_roads, $sql)) {
                 printf("Error inserting record: " . mysqli_error($mysqli_closed_roads));
+            } else {
+                $last_id = mysqli_insert_id($mysqli_closed_roads);
+
+                $sql = "SELECT * FROM civil_protection_geodata WHERE temp_civil_protection_id = '".$id."'";
+                $result = mysqli_query($mysqli_closed_roads, $sql);
+
+                if (mysqli_num_rows($result) === 1) {
+                    $sql = "UPDATE civil_protection_geodata SET civil_protection_id = '" . $last_id . "' WHERE temp_civil_protection_id ='" . $id . "'";
+
+                    if (!mysqli_query($mysqli_closed_roads, $sql)) {
+                        printf("Error updating record: " . mysqli_error($mysqli_closed_roads));
+                    }
+                }
             }
 
             updateCivilProtectionTable($id);
