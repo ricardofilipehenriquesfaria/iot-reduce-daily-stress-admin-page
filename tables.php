@@ -196,7 +196,7 @@
                             </tfoot>
                             <tbody>
 <?php
-    $sql = "SELECT * FROM temp_civil_protection WHERE editado=0";
+    $sql = "SELECT * FROM temp_civil_protection WHERE editado = 0";
     $result = mysqli_query($mysqli_closed_roads, $sql);
 
     if (mysqli_num_rows($result) > 0) {
@@ -280,12 +280,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">De certeza que pretende fazer Logout?</h5>
+                    <h5 class="modal-title">Tem a certeza de que pretende sair?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Selecione "Logout" se estiver pronto para terminar a sessão atual.</div>
+                <div class="modal-body">Selecione "Logout" para terminar a sessão atual.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                     <a class="btn btn-primary" href="logout.php">Logout</a>
@@ -299,7 +299,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar Dados</h5>
+                    <h5 class="modal-title">Editar Registo</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -308,51 +308,51 @@
                     <div class="modal-body">
                         <div class="form-group" style="display:none;">
                             <label>ID</label>
-                            <input type="input" class="form-control" id="id" name="id"/>
+                            <input type="input" class="form-control" id="id" name="id" />
                         </div>
                         <div class="form-group">
                             <label>Nome da Via</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Insira o nome da via" required>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Insira o nome da via..." required />
                             <div class="invalid-feedback">Por favor insira o nome da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Localização</label>
-                            <input type="text" class="form-control" id="localizacao" name="localizacao" placeholder="Insira a localização da estrada" required>
-                            <div class="invalid-feedback">Por favor insira a localização da estrada.</div>
+                            <input type="text" class="form-control" id="localizacao" name="localizacao" placeholder="Insira a localização da via..." required />
+                            <div class="invalid-feedback">Por favor insira a localização da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Estado</label>
-                            <input type="text" class="form-control" id="estado" name="estado" placeholder="Insira o estado da estrada" required>
-                            <div class="invalid-feedback">Por favor insira o estado da estrada.</div>
+                            <input type="text" class="form-control" id="estado" name="estado" placeholder="Insira o estado da via..." required />
+                            <div class="invalid-feedback">Por favor insira o estado da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Justificação</label>
-                            <input type="text" class="form-control" id="justificacao" name="justificacao" placeholder="Insira a justificação para o encerramento da estrada" required>
-                            <div class="invalid-feedback">Por favor insira a justificação para o encerramento da estrada.</div>
+                            <input type="text" class="form-control" id="justificacao" name="justificacao" placeholder="Insira a justificação para o encerramento da via..." required />
+                            <div class="invalid-feedback">Por favor insira a justificação para o encerramento da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Responsabilidade</label>
-                            <input type="text" class="form-control" id="responsabilidade" name="responsabilidade" placeholder="Insira a quem se deve a responsabilidade do encerramento da estrada" required>
-                            <div class="invalid-feedback">Por favor insira a quem se deve o encerramento da estrada.</div>
+                            <input type="text" class="form-control" id="responsabilidade" name="responsabilidade" placeholder="Insira a quem se deve a responsabilidade..." required />
+                            <div class="invalid-feedback">Por favor insira a quem se deve a responsabilidade do encerramento da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Edital/Documento</label>
-                            <input type="text" class="form-control" id="edital_documento" name="edital_documento" placeholder="Insira o url para o Edital/Documento">
+                            <input type="text" class="form-control" id="edital_documento" name="edital_documento" placeholder="Insira o url para o Edital/Documento..." />
                         </div>
                         <div class="form-group" style="display:none;">
                             <label>Coordenadas</label>
-                            <input type="input" class="form-control" id="coordenadas" name="coordenadas"/>
+                            <input type="input" class="form-control" id="coordenadas" name="coordenadas" />
                         </div>
                         <div class="form-group">
                             <label>Tipo de Encerramento</label>
                             <div class="radio">
-                                <input type="radio" name="tipo_encerramento" id="temporario" value="temporario" checked>
+                                <input type="radio" name="tipo_encerramento" id="temporario" value="temporario" checked />
                                 <label class="form-check-label">
                                     Temporário (em determinadas horas do dia)
                                 </label>
                             </div>
                             <div class="radio">
-                                <input type="radio" name="tipo_encerramento" id="permanente" value="permanente">
+                                <input type="radio" name="tipo_encerramento" id="permanente" value="permanente" />
                                 <label class="form-check-label">
                                     Permanente
                                 </label>
@@ -360,25 +360,27 @@
                         </div>
                         <div class="form-group">
                             <label>Data de Encerramento</label>
-                            <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" required/>
+                            <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" required />
                             <div class="invalid-feedback">Por favor insira a data de encerramento da via.</div>
                             <div class="alert alert-secondary" role="alert" id="data_encerramento">
                             </div>
                         </div>
                         <div class="form-group" id="div-hora-encerramento">
                             <label>Hora de Encerramento</label>
-                            <input type="time" class="form-control" id="hora_encerramento" name="hora_encerramento" placeholder="Insira as horas de encerramento da via." required>
+                            <input type="time" class="form-control" id="hora_encerramento" name="hora_encerramento" placeholder="Insira as horas de encerramento da via..." required />
+                            <div class="invalid-feedback">Por favor insira as horas de encerramento da via.</div>
                         </div>
                         <div class="form-group">
                             <label>Data de Reabertura</label>
-                            <input type="date" class="form-control" id="data_reabertura" name="data_reabertura" required/>
+                            <input type="date" class="form-control" id="data_reabertura" name="data_reabertura" required />
                             <div class="invalid-feedback">Por favor insira a data de reabertura da via.</div>
                             <div class="alert alert-secondary" role="alert" id="data_reabertura">
                             </div>
                         </div>
                         <div class="form-group" id="div-hora-reabertura">
                             <label>Hora de Reabertura</label>
-                            <input type="time" class="form-control" id="hora_reabertura" name="hora_reabertura" placeholder="Insira as horas de reabertura da via." required>
+                            <input type="time" class="form-control" id="hora_reabertura" name="hora_reabertura" placeholder="Insira as horas de reabertura da via..." required />
+                            <div class="invalid-feedback">Por favor insira as horas de reabertura da via.</div>
                         </div>
                     </div>
                     <div class="modal-footer">
