@@ -6,7 +6,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (empty($_POST["email"]) && empty($_POST['password'])) {
-            $error = "Por favor introduza o seu Email e Password!";
+            $error = "Por favor introduza o seu Email e a sua Password!";
         } else if (empty($_POST["email"])) {
             $error = "Por favor introduza o seu Email!";
         } else if (empty($_POST["password"])) {
@@ -19,11 +19,11 @@
                 'cost' => 10,
             ];
 
-            $sql = "SELECT id, password FROM user_login WHERE email = '".$email."'";
+            $sql = "SELECT id, password FROM users_login WHERE email = '".$email."'";
             $result = mysqli_query($mysqli, $sql);
             $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
-            // Se o valor retornado pela base de dados coincidir com $username e $password, o número de linhas será 1.
+            // Se o valor retornado pela base de dados coincidir com o $email e a $password, o número de linhas será 1.
             if (mysqli_num_rows($result) === 1 && password_verify($password, $row['password'])) {
                 $_SESSION['username'] = $email;
                 header("Location: tables.php");
@@ -77,12 +77,12 @@
                             </div>
                             <form class="user" method="post">
                                 <div class="form-group">
-                                    <input type="email" name="email" class="form-control form-control-user" id="email" aria-describedby="emailHelp" placeholder="Introduza o seu endereço de Email...">
+                                    <input type="email" name="email" class="form-control form-control-user" id="email" placeholder="Introduza o seu endereço de Email..." />
                                 </div>
                                 <div class="form-group">
-                                  <input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Introduza a sua Password...">
+                                  <input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Introduza a sua Password..." />
                                 </div>
-                                <input class="btn btn-primary btn-user btn-block" type="submit" value="Login"/><br />
+                                <input class="btn btn-primary btn-user btn-block" type="submit" value="Login" /><br />
                             </form>
                             <hr>
 <?php
